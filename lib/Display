@@ -1,0 +1,57 @@
+import 'package:flutter/material.dart';
+import 'timefile.dart';
+import 'main.dart';
+
+
+class Display extends StatefulWidget {
+  final String? time;
+  final String? location;
+  Display({this.time,  this.location});
+
+  @override
+  _DisplayState createState() => _DisplayState();
+}
+
+
+class _DisplayState extends State<Display> {
+  String? time = 'Loading-Time';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData(); // Fetch data when the screen is created
+  }
+
+  Future<void> fetchData() async {
+    OnlineTime myTime = OnlineTime(Location: widget.location);
+    await myTime.gettime();
+    setState(() {
+      time = myTime.Time;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('World Time App'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Location: ${widget.location}',
+              style: TextStyle(fontSize: 24),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Time: $time',
+              style: TextStyle(fontSize: 48),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
